@@ -5,6 +5,8 @@ if you want to run programm
 include a file(that have main )
 because there is variouss project (앞에 숫자 있는게 main 함수 포함)
 
+fx folder include shader file
+
 현재 
 geometry shader , tesselation shader , shadow mapping, lighting, 등등 공부함 
 
