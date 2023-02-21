@@ -6,7 +6,7 @@ include a file(that have main )
 because there is variouss project (앞에 숫자 있는게 main 함수 포함)
 
 현재 
-geometry shader , tesselation shader , shadow mapping, lighting, 등등 공부함 
+geometry shader , tesselation shader , shadow mapping, lighting, normal map dislocation mappig 구현
 
 compute shader 공부해야됨 
 
