@@ -29,6 +29,26 @@ protected:
 #pragma endregion
 
 
+
+class ColorEffect : public Effect {
+
+public:
+	ColorEffect(ID3D11Device* device, const WCHAR* filename);
+	~ColorEffect();
+
+	void SetWorldViewProj(CXMMATRIX M) {
+		WolrdViewProj->SetMatrix(reinterpret_cast<const float*>(&M));
+	}
+
+	ID3DX11EffectTechnique* ColorTech;
+	ID3DX11EffectMatrixVariable* WolrdViewProj;
+
+
+
+
+};
+
+
 class NormalMapEffect : public Effect {
 
 public:
@@ -296,8 +316,24 @@ public:
 
 #pragma endregion
 
+#pragma region TestEffect
+class TestEffect :public Effect {
+public:
+	TestEffect(ID3D11Device* device, const WCHAR* filename);
+	~TestEffect();
+	void SetWorldViewProj(CXMMATRIX M) { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetGridMap(ID3D11ShaderResourceView* gridmap) { GridMap->SetResource(gridmap); }
+	void SetEyePosW(const XMFLOAT3& v) { EyePosW->SetRawValue(&v, 0, sizeof(XMFLOAT3)); }
+	void SetDirLights(const DirectionalLight* lights) { DirLights->SetRawValue(lights, 0, 3 * sizeof(DirectionalLight)); }
+	ID3DX11EffectTechnique* Testtech;
+	ID3DX11EffectVariable* DirLights;
+	ID3DX11EffectShaderResourceVariable* GridMap;
+	ID3DX11EffectMatrixVariable* WorldViewProj;
+	ID3DX11EffectVectorVariable* EyePosW;
 
 
+};
+#pragma endregion
 
 #pragma region CubeEffect
 class CubeEffect:public Effect {
@@ -480,6 +516,8 @@ public:
 	static void Initialize(ID3D11Device* device);
 	static void Shutdown();
 
+
+	static unique_ptr<ColorEffect> ColorFX;
 	static unique_ptr<BasicEffect> BasicFX;
 	
 	static unique_ptr<BasicEffect> InstanceBasicFX;
@@ -488,6 +526,8 @@ public:
 	static  unique_ptr < TreeEffect> TreeFX;
 	static  unique_ptr < CubeEffect> CubeFX;
 
+	static  unique_ptr<TestEffect> TestFX;
+	static  unique_ptr<TestEffect> Test2FX;
 	static  unique_ptr < ParticleEffect> FireFX;
 	static  unique_ptr < ParticleEffect> RainFX;
 

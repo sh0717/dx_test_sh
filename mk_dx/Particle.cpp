@@ -112,7 +112,7 @@ void Particle::Draw(ID3D11DeviceContext* context, const gCamera& camera) {
 	mFX->SetRandomTex(mRandomTexSRV);
 
 
-	context->IASetInputLayout(InputLayouts::Particle);
+	context->IASetInputLayout(InputLayouts::Particle.Get());
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 
 	UINT stride = sizeof(Vertex::Particle);

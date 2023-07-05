@@ -12,6 +12,8 @@
 #include "gCamera.h"
 #include "CubeModel.h"
 #include "Particle.h"
+#include "Fluid.h"
+
 using namespace std;
 enum RenderOptions {
 	Light=1,
@@ -42,6 +44,16 @@ public:
 	void OnMouseUp(WPARAM btnState, int x, int y);
 	void OnMouseMove(WPARAM btnState, int x, int y);
 
+
+
+	Fluid* mFluid;
+	shared_ptr<GridSystem> mGrid;
+
+
+
+
+
+
 private:
 	float GetHillHeight(float x, float z)const;
 	XMFLOAT3 GetHillNormal(float x, float z)const;
@@ -55,7 +67,7 @@ private:
 	void DrawTreeSprites(CXMMATRIX viewProj);
 private:
 	Particle mFire;
-	Particle mRain;
+	//Particle mRain;
 	CubeModel* msky;
 
 	gCamera mCamera;
@@ -82,7 +94,7 @@ private:
 	ID3D11ShaderResourceView* mTreeTextureMapArraySRV;
 
 	ID3D11ShaderResourceView* mFlareTexSRV;
-	ID3D11ShaderResourceView* mRainTexSRV;
+	//ID3D11ShaderResourceView* mRainTexSRV;
 	ID3D11ShaderResourceView* mRandomSRV;
 
 
@@ -138,11 +150,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 TexturedHillsAndWavesApp::TexturedHillsAndWavesApp(HINSTANCE hInstance)
 : D3DApp(hInstance), mLandVB(0), mLandIB(0), mWavesVB(0), mWavesIB(0), mGrassMapSRV(0), mWavesMapSRV(0), mWaterTexOffset(0.0f, 0.0f),
-  mLandIndexCount(0), mAlphaToCoverage(false),mCamera(),msky(nullptr),mRandomSRV(nullptr), mFlareTexSRV(nullptr), mRainTexSRV(nullptr)
+  mLandIndexCount(0), mAlphaToCoverage(false),mCamera(),msky(nullptr),mRandomSRV(nullptr), mFlareTexSRV(nullptr),mFluid(nullptr),mGrid(nullptr) //mRainTexSRV(nullptr)
 {
+	mFluid = new Fluid();
+	mGrid = make_shared<GridSystem>();
 	
-	
-	mCamera.SetPosition(0.0f, 20.0f, -25.0f);
+	mCamera.SetPosition(0.0f, 0.0, -6.0f);
 	mMainWndCaption = L"TexturedHillsAndWaves Demo";
 
 	mRenderOption = RenderOptions::Texture;
@@ -229,7 +242,7 @@ bool TexturedHillsAndWavesApp::Init()
 {
 	if(!D3DApp::Init())
 		return false;
-
+	
 	mWaves.Init(160, 160, 1.0, 0.03f, 3.25f, 0.4f);
 
 	// Must init Effects first since InputLayouts depend on shader signatures.
@@ -238,7 +251,7 @@ bool TexturedHillsAndWavesApp::Init()
 	RenderStates::Initialize(md3dDevice);
 
 	msky = new CubeModel(md3dDevice, L"../Textures/grasscube1024.dds", 5000.0f);
-
+	mFluid->Initialize(md3dDevice, md3dImmediateContext, Effects::TestFX.get(), mGrid);
 	HR(D3DX11CreateShaderResourceViewFromFile(md3dDevice, 
 		L"../Textures/grass.dds", 0, 0, &mGrassMapSRV, 0 ));
 
@@ -270,13 +283,13 @@ bool TexturedHillsAndWavesApp::Init()
 	flares.push_back(L"../Textures/flare0.dds");
 	mFlareTexSRV = d3dHelper::CreateTexture2DArraySRV(md3dDevice, md3dImmediateContext, flares);
 
-	mFire.Initialize(md3dDevice, Effects::FireFX, mFlareTexSRV, mRandomSRV, 500);
+	mFire.Initialize(md3dDevice, Effects::FireFX.get(), mFlareTexSRV, mRandomSRV, 500);
 	mFire.SetEmitPos(XMFLOAT3(0.0f, 10.0f, 12.0f));
 
 	vector<wstring> rains;
 	rains.push_back(L"../Textures/raindrop.dds");
-	mRainTexSRV = d3dHelper::CreateTexture2DArraySRV(md3dDevice, md3dImmediateContext, rains);
-	mRain.Initialize(md3dDevice, Effects::RainFX, mRainTexSRV, mRandomSRV, 10000);
+	//mRainTexSRV = d3dHelper::CreateTexture2DArraySRV(md3dDevice, md3dImmediateContext, rains);
+	//mRain.Initialize(md3dDevice, Effects::RainFX.get(), mRainTexSRV, mRandomSRV, 10000);
 
 	return true;
 }
@@ -293,9 +306,9 @@ void TexturedHillsAndWavesApp::UpdateScene(float dt)
 	
 	
 
-	
-	mFire.Update(dt, mTimer.TotalTime());
-	mRain.Update(dt, mTimer.TotalTime());
+	mFluid->Update(0.1, mTimer.TotalTime());
+	//mFire.Update(dt, mTimer.TotalTime());
+	//mRain.Update(dt, mTimer.TotalTime());
 	
 
 	//
@@ -314,12 +327,12 @@ void TexturedHillsAndWavesApp::UpdateScene(float dt)
 		mWaves.Disturb(i, j, r);
 	}
 
-	mWaves.Update(dt);
+	//mWaves.Update(dt);
 
 	//
 	// Update the wave vertex buffer with the new solution.
 	//
-	
+	/*
 	D3D11_MAPPED_SUBRESOURCE mappedData;
 	HR(md3dImmediateContext->Map(mWavesVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData));
 
@@ -335,12 +348,13 @@ void TexturedHillsAndWavesApp::UpdateScene(float dt)
 	}
 
 	md3dImmediateContext->Unmap(mWavesVB, 0);
-
+	*/
 	//
 	// Animate water texture coordinates.
 	//
 
 	// Tile water texture.
+	/*
 	XMMATRIX wavesScale = XMMatrixScaling(5.0f, 5.0f, 0.0f);
 
 	// Translate texture over time.
@@ -350,7 +364,7 @@ void TexturedHillsAndWavesApp::UpdateScene(float dt)
 
 	// Combine scale and translation.
 	XMStoreFloat4x4(&mWaterTexTransform, wavesScale*wavesOffset);
-
+	*/
 	if (GetAsyncKeyState('1') & 0x8000)
 		mRenderOption = RenderOptions::Light;
 
@@ -394,9 +408,9 @@ void TexturedHillsAndWavesApp::DrawScene()
 	
 	msky->Draw(md3dImmediateContext, mCamera);
 
-	DrawTreeSprites(mCamera.viewProj());
-
-	md3dImmediateContext->IASetInputLayout(InputLayouts::Basic32);
+	//DrawTreeSprites(mCamera.viewProj());
+	
+	md3dImmediateContext->IASetInputLayout(InputLayouts::Pos.Get());
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
  
 
@@ -409,36 +423,24 @@ void TexturedHillsAndWavesApp::DrawScene()
 	XMMATRIX viewProj = view*proj;
 	XMFLOAT3 eyePos = mCamera.GetPosition();
 	// Set per frame constants.
-	Effects::BasicFX->SetDirLights(mDirLights);
-	Effects::BasicFX->SetEyePosW(eyePos);
-	Effects::BasicFX->SetFogColor(Colors::Red);
-	Effects::BasicFX->SetFogStart(15.0f);
-	Effects::BasicFX->SetFogRange(1750.0f);
+	//Effects::BasicFX->SetDirLights(mDirLights);
+	//Effects::BasicFX->SetEyePosW(eyePos);
+	//Effects::BasicFX->SetFogColor(Colors::Red);
+	//Effects::BasicFX->SetFogStart(15.0f);
+	//Effects::BasicFX->SetFogRange(1750.0f);
+	//Effects::TestFX->SetEyePosW(eyePos);
+	//Effects::TestFX->SetGridMap(gridSRV);
+	
 
 
 
-	ID3DX11EffectTechnique* boxTech= Effects::BasicFX->Light3TexTech;
-	ID3DX11EffectTechnique* landAndWavesTech= Effects::BasicFX->Light3TexTech;
+	//ID3DX11EffectTechnique* boxTech= Effects::TestFX->Testtech;
+	//D3DX11EffectTechnique* landAndWavesTech= Effects::BasicFX->Light3TexTech;
 
 
-	ID3DX11EffectTechnique* marbleTech = Effects::BasicFX->Light3ReflectTech;
+	
 
-
-	switch (mRenderOption) {
-		case RenderOptions::Light:
-			boxTech = Effects::BasicFX->Light3Tech;
-			landAndWavesTech = Effects::BasicFX->Light3Tech;
-			break;
-		case RenderOptions::Texture:
-			boxTech = Effects::BasicFX->Light3TexTechAlphaclip;
-			landAndWavesTech = Effects::BasicFX->Light3TexTech;
-			break;
-		case RenderOptions::TextureAndFog:
-			boxTech = Effects::BasicFX->Light3TexAlphaClipFogTech;
-			landAndWavesTech = Effects::BasicFX->Light3TexFogTech;
-			break;
-	}
-
+	/*
     D3DX11_TECHNIQUE_DESC techDesc;
 	boxTech->GetDesc(&techDesc);
 
@@ -448,49 +450,19 @@ void TexturedHillsAndWavesApp::DrawScene()
 		md3dImmediateContext->IASetIndexBuffer(mBoxIB, DXGI_FORMAT_R32_UINT, 0);
 
 		// Set per object constants.
-		XMMATRIX world = XMLoadFloat4x4(&mBoxWorld);
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		XMMATRIX worldViewProj = world * view * proj;
 
-		Effects::BasicFX->SetWorld(world);
-		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
-		Effects::BasicFX->SetWorldViewProj(worldViewProj);
-		Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
-		Effects::BasicFX->SetMaterial(mBoxMat);
-		Effects::BasicFX->SetDiffuseMap(mBoxMapSRV);
-
-		RenderStates::NoCullOn(md3dImmediateContext);
+		Effects::TestFX->SetWorldViewProj(XMMatrixIdentity() * viewProj);
+		//RenderStates::NoCullOn(md3dImmediateContext);
 		boxTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
-		md3dImmediateContext->DrawIndexed(36, 0, 0);
+		//md3dImmediateContext->DrawIndexed(36, 0, 0);
 
 		// Restore default render state.
-		RenderStates::NoCullOff(md3dImmediateContext);
+		//RenderStates::NoCullOff(md3dImmediateContext);
 	}
 
-	/* draw marble 
-	
 	*/
-	marbleTech->GetDesc(&techDesc);
-	for (UINT p = 0; p < techDesc.Passes; ++p) {
-		md3dImmediateContext->IASetVertexBuffers(0, 1, &mMarbleVB, &stride, &offset);
-		md3dImmediateContext->IASetIndexBuffer(mMarbleIB, DXGI_FORMAT_R32_UINT, 0);
-	
-		XMMATRIX world = XMLoadFloat4x4(&mMarbleWorld);
-		
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		XMMATRIX worldViewProj = world * view * proj;
-		Effects::BasicFX->SetWorld(world);
-		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
-		Effects::BasicFX->SetWorldViewProj(worldViewProj);
-		
-		Effects::BasicFX->SetMaterial(mMarbeMat);
-		Effects::BasicFX->SetCubeMap(msky->GetSRV());
-		marbleTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
-		md3dImmediateContext->DrawIndexed(mMarbleIndexCount, 0, 0);
 
-	}
-
-	
+	/*
 	landAndWavesTech->GetDesc( &techDesc );
     for(UINT p = 0; p < techDesc.Passes; ++p)
     {
@@ -541,21 +513,27 @@ void TexturedHillsAndWavesApp::DrawScene()
 		//md3dImmediateContext->OMSetBlendState(0, blendFactor, 0xffffffff);
     }
 
-	mFire.SetEyePos(mCamera.GetPosition());
-	mFire.Draw(md3dImmediateContext, mCamera);
+	//mFire.SetEyePos(mCamera.GetPosition());
+	//mFire.Draw(md3dImmediateContext, mCamera);
 	md3dImmediateContext->OMSetBlendState(0, blendFactor, 0xffffffff);
 
-	mRain.SetEyePos(mCamera.GetPosition());
-	mRain.SetEmitPos(mCamera.GetPosition());
-	mRain.Draw(md3dImmediateContext, mCamera);
+	//mRain.SetEyePos(mCamera.GetPosition());
+	//mRain.SetEmitPos(mCamera.GetPosition());
+	//mRain.Draw(md3dImmediateContext, mCamera);
 
 
 	md3dImmediateContext->RSSetState(0);
 	md3dImmediateContext->OMSetDepthStencilState(0, 0);
 	md3dImmediateContext->OMSetBlendState(0, blendFactor, 0xffffffff);
+	*/
 
+	RenderStates::TransparentOn(md3dImmediateContext);
 
+	Effects::TestFX->SetDirLights(mDirLights);
+	mFluid->Draw(md3dImmediateContext, mCamera, mBoxVB, mBoxIB,viewProj);
+	RenderStates::TransparentOff(md3dImmediateContext);
 	HR(mSwapChain->Present(0, 0));
+
 }
 
 void TexturedHillsAndWavesApp::OnMouseDown(WPARAM btnState, int x, int y)
@@ -839,7 +817,7 @@ void TexturedHillsAndWavesApp::DrawTreeSprites(CXMMATRIX viewProj) {
 	Effects::TreeFX->SetTreeTextureMapArray(mTreeTextureMapArraySRV);
 
 	md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-	md3dImmediateContext->IASetInputLayout(InputLayouts::Tree32);
+	md3dImmediateContext->IASetInputLayout(InputLayouts::Tree32.Get());
 	UINT stride = sizeof(Vertex::Tree32);
 	UINT offset = 0;
 

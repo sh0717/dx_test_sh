@@ -5,16 +5,21 @@
 #pragma region InputLayouts
 
 
-ComPtr<ID3D11InputLayout> InputLayouts::Basic32;
-
-
-ID3D11InputLayout* InputLayouts::Tree32 = nullptr;
-ID3D11InputLayout* InputLayouts::Pos = nullptr;
-ComPtr<ID3D11InputLayout> InputLayouts::PosNorTexTan(nullptr)
-;
-ID3D11InputLayout* InputLayouts::InstanceBasic32 = nullptr;
-ID3D11InputLayout* InputLayouts::Particle = nullptr;
+ComPtr<ID3D11InputLayout> InputLayouts::Basic32=nullptr;
+ComPtr<ID3D11InputLayout> InputLayouts::Tree32 = nullptr;
+ComPtr<ID3D11InputLayout> InputLayouts::Pos = nullptr;
+ComPtr<ID3D11InputLayout> InputLayouts::PosNorTexTan(nullptr);
+ComPtr<ID3D11InputLayout> InputLayouts::InstanceBasic32 = nullptr;
+ComPtr<ID3D11InputLayout> InputLayouts::Particle = nullptr;
 ComPtr<ID3D11InputLayout> InputLayouts::Terrain(nullptr);
+ComPtr<ID3D11InputLayout> InputLayouts::PosColor = nullptr;
+
+
+const D3D11_INPUT_ELEMENT_DESC InputLayouts::PosColor_desc[2] = {
+
+	{"POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0},
+	{"COLOR",0,DXGI_FORMAT_R32G32B32A32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA,0}
+};
 
 const D3D11_INPUT_ELEMENT_DESC InputLayouts::PosNormal_desc[2] =
 {
@@ -86,18 +91,22 @@ const D3D11_INPUT_ELEMENT_DESC InputLayouts::Terrain_desc[3] =
 void InputLayouts::Initialize(ID3D11Device* device)
 {
 	D3DX11_PASS_DESC passDesc;
+
+	Effects::ColorFX->ColorTech->GetPassByIndex(0)->GetDesc(&passDesc);
+	HR(device->CreateInputLayout(PosColor_desc, 2, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, PosColor.GetAddressOf()));
+
 	Effects::BasicFX->Light1Tech->GetPassByIndex(0)->GetDesc(&passDesc);
 	HR(device->CreateInputLayout(Basic32_desc, 3, passDesc.pIAInputSignature,
 		passDesc.IAInputSignatureSize, Basic32.GetAddressOf()));
 
 	Effects::TreeFX->Light3Tech->GetPassByIndex(0)->GetDesc(&passDesc);
 	HR(device->CreateInputLayout(Tree32_desc, 2, passDesc.pIAInputSignature,
-		passDesc.IAInputSignatureSize, &Tree32));
+		passDesc.IAInputSignatureSize, Tree32.GetAddressOf()));
 
 
 	Effects::CubeFX->SkyTech->GetPassByIndex(0)->GetDesc(&passDesc);
 	HR(device->CreateInputLayout(Pos_desc, 1, passDesc.pIAInputSignature,
-		passDesc.IAInputSignatureSize, &Pos));
+		passDesc.IAInputSignatureSize, Pos.GetAddressOf()));
 
 
 
@@ -109,11 +118,11 @@ void InputLayouts::Initialize(ID3D11Device* device)
 
 	Effects::InstanceBasicFX->Light1Tech->GetPassByIndex(0)->GetDesc(&passDesc);
 	HR(device->CreateInputLayout(InstanceBasic32_desc, 8, passDesc.pIAInputSignature,
-		passDesc.IAInputSignatureSize, &InstanceBasic32));
+		passDesc.IAInputSignatureSize, InstanceBasic32.GetAddressOf()));
 
 	Effects::FireFX->StreamOutTech->GetPassByIndex(0)->GetDesc(&passDesc);
 	HR(device->CreateInputLayout(Particle_desc, 5, passDesc.pIAInputSignature,
-		passDesc.IAInputSignatureSize, &Particle));
+		passDesc.IAInputSignatureSize, Particle.GetAddressOf()));
 
 
 	Effects::TerrainFX->Light3Tech->GetPassByIndex(0)->GetDesc(&passDesc);
@@ -124,12 +133,7 @@ void InputLayouts::Initialize(ID3D11Device* device)
 
 void InputLayouts::Shutdown()
 {
-	
-	
-	ReleaseCOM(Tree32);
-	ReleaseCOM(Pos);
-	
-	ReleaseCOM(Particle);
+
 	
 
 }

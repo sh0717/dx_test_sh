@@ -16,6 +16,9 @@
       <FullPath>C:\Users\Admin\Desktop\mk_dx\Debug\BuildShadowMap.cso</FullPath>
     </ContentFile>
     <ContentFile>
+      <FullPath>C:\Users\Admin\Desktop\mk_dx\Debug\color.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
       <FullPath>C:\Users\Admin\Desktop\mk_dx\Debug\DebugTexture.cso</FullPath>
     </ContentFile>
     <ContentFile>
@@ -47,6 +50,12 @@
     </ContentFile>
     <ContentFile>
       <FullPath>C:\Users\Admin\Desktop\mk_dx\Debug\tessel.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\Admin\Desktop\mk_dx\Debug\test.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\Admin\Desktop\mk_dx\Debug\test2.cso</FullPath>
     </ContentFile>
     <ContentFile>
       <FullPath>C:\Users\Admin\Desktop\mk_dx\Debug\TreeSprite.cso</FullPath>

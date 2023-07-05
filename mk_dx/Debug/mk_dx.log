@@ -1,1 +1,26 @@
-﻿  mk_dx.vcxproj -> C:\Users\Admin\Desktop\mk_dx\Debug\mk_dx.exe
+﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(93,25-60): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+  compilation object save succeeded; see C:\Users\Admin\Desktop\mk_dx\Debug\test.cso
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\Admin\Desktop\mk_dx\FX\test.fx(110,28-64): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+  
+  mk_dx.vcxproj -> C:\Users\Admin\Desktop\mk_dx\Debug\mk_dx.exe

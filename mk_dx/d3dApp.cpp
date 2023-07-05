@@ -173,7 +173,7 @@ void D3DApp::OnResize()
 	}
 
 	depthStencilDesc.Usage          = D3D11_USAGE_DEFAULT;
-	depthStencilDesc.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
+	depthStencilDesc.BindFlags      = D3D11_BIND_DEPTH_STENCIL;/*이렇게 정해줘야되*/
 	depthStencilDesc.CPUAccessFlags = 0; 
 	depthStencilDesc.MiscFlags      = 0;
 

@@ -46,7 +46,17 @@ Effect::~Effect()
 }
 #pragma endregion
 
-#pragma region BasicEffect
+ColorEffect::ColorEffect(ID3D11Device* device, const WCHAR* filename)
+	:Effect(device,filename)
+{
+	ColorTech = mFX->GetTechniqueByName("ColorTech");
+	WolrdViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
+
+}
+ColorEffect::~ColorEffect() {}
+
+
+#pragma region NormalMapEffect
 NormalMapEffect::NormalMapEffect(ID3D11Device* device, const WCHAR* filename)
 	: Effect(device, filename)
 {
@@ -209,6 +219,22 @@ TreeEffect::~TreeEffect()
 
 #pragma endregion
 
+
+#pragma  region TestEffect
+TestEffect::TestEffect(ID3D11Device* device, const WCHAR* filename) :Effect(device, filename) {
+	Testtech = mFX->GetTechniqueByName("Testtech");
+
+	WorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
+	GridMap = mFX->GetVariableByName("gGridMap")->AsShaderResource();
+
+	EyePosW = mFX->GetVariableByName("gEyePosW")->AsVector();
+	DirLights = mFX->GetVariableByName("gDirLights");
+};
+
+TestEffect::~TestEffect() {}
+#pragma endregion
+
+
 #pragma region CubeEffect
 
 CubeEffect::CubeEffect(ID3D11Device* device, const WCHAR* filename) :Effect(device, filename) {
@@ -334,11 +360,14 @@ DebugTextureEffect::~DebugTextureEffect() {}
 #pragma region Effects
 
 unique_ptr < BasicEffect> Effects::BasicFX = nullptr;
+unique_ptr < ColorEffect> Effects::ColorFX = nullptr;
 unique_ptr < BasicEffect> Effects::InstanceBasicFX = nullptr;
 
 
 unique_ptr < TreeEffect> Effects::TreeFX = nullptr;
 unique_ptr < CubeEffect> Effects::CubeFX = nullptr;
+unique_ptr < TestEffect> Effects::TestFX = nullptr;
+unique_ptr < TestEffect> Effects::Test2FX = nullptr;
 unique_ptr < NormalMapEffect> Effects::NormalMapFX = nullptr;
 unique_ptr < DisplacementMapEffect> Effects::DisplacementMapFX = nullptr;
 
@@ -355,11 +384,16 @@ unique_ptr < DebugTextureEffect> Effects::DebugFX = nullptr;
 
 void Effects::Initialize(ID3D11Device* device)
 {
+	ColorFX = make_unique<ColorEffect>(device, L"../FX/color.fx");
 	BasicFX = make_unique< BasicEffect>(device, L"../FX/Basic.fx");
 	NormalMapFX = make_unique < NormalMapEffect>(device, L"../FX/NormalMap.fx");
 	DisplacementMapFX = make_unique < DisplacementMapEffect>(device, L"../FX/DisplacementMap.fx");
 	TreeFX = make_unique < TreeEffect>(device, L"../FX/TreeSprite.fx");
 	CubeFX = make_unique < CubeEffect>(device, L"../FX/CubeMap.fx");
+	TestFX = make_unique<TestEffect>(device, L"../FX/test.fx");
+	Test2FX = make_unique<TestEffect>(device, L"../FX/test2.fx");
+
+
 	InstanceBasicFX = make_unique < BasicEffect>(device, L"../FX/InstanceBasic.fx");
 	FireFX = make_unique < ParticleEffect>(device, L"../FX/Fire.fx");
 	RainFX = make_unique < ParticleEffect>(device, L"../FX/Rain.fx");

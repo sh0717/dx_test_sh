@@ -69,7 +69,7 @@ void CubeModel::Draw(ID3D11DeviceContext* context, const gCamera& camera) {
 	UINT offset = 0;
 	context->IASetVertexBuffers(0, 1, mVB.GetAddressOf(), &stride, &offset);
 	context->IASetIndexBuffer(mIB.Get(), DXGI_FORMAT_R16_UINT, 0);
-	context->IASetInputLayout(InputLayouts::Pos);
+	context->IASetInputLayout(InputLayouts::Pos.Get());
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	D3DX11_TECHNIQUE_DESC techDesc;

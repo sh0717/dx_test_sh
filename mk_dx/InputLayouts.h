@@ -3,9 +3,17 @@
 
 
 namespace Vertex {
+
+	
+
 	struct PosNormal {
 		XMFLOAT3 Pos;
 		XMFLOAT3 Normal;
+	};
+
+	struct PosColor {
+		XMFLOAT3 Pos;
+		XMFLOAT4 Color;
 	};
 
 
@@ -67,6 +75,12 @@ public:
 	static void Initialize(ID3D11Device* device);
 	static void Shutdown();
 
+
+
+
+	static const D3D11_INPUT_ELEMENT_DESC PosColor_desc[2];
+	static ComPtr<ID3D11InputLayout> PosColor;
+
 	static const D3D11_INPUT_ELEMENT_DESC PosNormal_desc[2];
 	static ComPtr<ID3D11InputLayout> PosNormal;
 
@@ -80,10 +94,10 @@ public:
 
 
 	static const D3D11_INPUT_ELEMENT_DESC Tree32_desc[2];
-	static ID3D11InputLayout* Tree32;
+	static ComPtr<ID3D11InputLayout> Tree32;
 
 	static const D3D11_INPUT_ELEMENT_DESC Pos_desc[1];
-	static ID3D11InputLayout* Pos;
+	static ComPtr<ID3D11InputLayout> Pos;
 
 
 
@@ -92,10 +106,10 @@ public:
 
 
 	static const D3D11_INPUT_ELEMENT_DESC InstanceBasic32_desc[8];
-	static ID3D11InputLayout* InstanceBasic32;
+	static ComPtr<ID3D11InputLayout> InstanceBasic32;
 
 	static const D3D11_INPUT_ELEMENT_DESC Particle_desc[5];
-	static ID3D11InputLayout* Particle;
+	static ComPtr<ID3D11InputLayout> Particle;
 
 	static const D3D11_INPUT_ELEMENT_DESC Terrain_desc[3];
 	static ComPtr<ID3D11InputLayout> Terrain;

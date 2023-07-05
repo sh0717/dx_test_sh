@@ -72,6 +72,15 @@
     <FxCompile Include="..\FX\DisplacementMap.fx">
       <Filter>FX</Filter>
     </FxCompile>
+    <FxCompile Include="..\FX\color.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
+    <FxCompile Include="..\FX\test.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
+    <FxCompile Include="..\FX\test2.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputLayouts.cpp">
@@ -134,8 +143,17 @@
     <ClCompile Include="Screen.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="13_2_bezier.cpp">
+    <ClCompile Include="Grid.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Simulator.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Fluid.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="20_particle.cpp">
+      <Filter>소스 파일\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -206,6 +224,18 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="WaveFrontReader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Simulator.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Fluid.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
