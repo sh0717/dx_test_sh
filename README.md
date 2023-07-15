@@ -1,15 +1,1 @@
-this is directx11 learning project 
-
-if you want to run programm 
-
-include a file(that have main )
-because there is variouss project (앞에 숫자 있는게 main 함수 포함)
-
-fx folder include shader file
-
-현재 
-geometry shader , tesselation shader , shadow mapping, lighting, normal , dislocation complete
-
-compute shader 공부해야됨 
-
-프로젝트별로 설명은 추후에
+# ㅇㅁㄴㄹ
